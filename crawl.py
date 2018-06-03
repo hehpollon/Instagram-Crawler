@@ -3,6 +3,7 @@ import os
 import requests
 from utils.browser import Browser
 from docopt import docopt
+from tqdm import tqdm
 
 def downloadImage(imageUrl, imagePath):
     img_data = requests.get(imageUrl).content
@@ -67,7 +68,7 @@ def extractCommentsMessage(data):
         results = []
     return results
 
-def extractMessage(data):
+def extractCaption(data):
     result = ""
     try:
         splitData = data.split('<img alt="')
@@ -77,7 +78,6 @@ def extractMessage(data):
             # only english?
             result = data.split('{"node":{"text":"')[1].split('"}')[0]
             result = result.encode('utf-8').decode('unicode-escape')
-            print(result)
     except Exception as e:
         print("No message data")
         result = ""
@@ -101,7 +101,7 @@ def runCrawl(limitNum = 0,queryList = []):
 
         print("collecting data...")
         slist = list(set(browser.urlList))
-        for url in slist:
+        for url in tqdm(slist):
             dirName = url.split("/")[4]
             # skip if already crawled 
             if not makeDir("data/"+query+"/"+dirName):
@@ -113,17 +113,17 @@ def runCrawl(limitNum = 0,queryList = []):
             # extract data
             likes = extractLikes(infoData)
             comments = extractComments(infoData)
-            message = extractMessage(cur)
+            caption = extractCaption(cur)
             dateTime = extractDateTime(cur)
             commentMessages = extractCommentsMessage(cur)
-            print("likes:",likes," comments:", comments," message:", message, 
-                "commentMessages:", commentMessages, "dateTime:", dateTime)
+            # print("likes:",likes," comments:", comments," caption:", caption, 
+            #     "commentMessages:", commentMessages, "dateTime:", dateTime)
             writeToFile(
                 "data/"+query+"/"+dirName+"/info.txt", 
                 [   
                     "likes: ", likes, "",
                     "comments: ", comments, "",
-                    "message: ", message, "",
+                    "caption: ", caption, "",
                     "commentMessages: ", commentMessages, "",
                     "dateTime: ", dateTime, ""
                 ]
