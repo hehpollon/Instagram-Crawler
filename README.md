@@ -15,9 +15,9 @@ Download the first 10 photos and from username "instagram"
 ```
 $ python3.6 crawl.py -q 'instagram' -n 10
 ```
-Download the first 5 photos and from hashtags #hello, #hi
+Download the first 7 photos and from hashtags #hello, #hi
 ```
-$ python3.6 crawl.py -q '#hello, #hi' -n 10
+$ python3.6 crawl.py -q '#hello, #hi' -n 7
 ```
 ###### you can enter multiple username or hashtags by separating them with commas
 ### Example of a files data
