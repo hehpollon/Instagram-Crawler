@@ -19,8 +19,8 @@ Download the first 5 photos and from hashtags #hello, #hi
 ```
 $ python3.6 crawl.py -q '#hello, #hi' -n 10
 ```
+###### you can enter multiple username or hashtags by separating them with commas
 ### Example of a files data
-###### photo of post will download in ./data folder
 ```
 likes: 
 5,326
@@ -38,6 +38,7 @@ this_is_t.rs: my name says it all
 dateTime: 
 2018-05-30T19:42:03.000Z
 ```
+###### photo of post will download in ./data folder
 
 ## Usage
 ```
