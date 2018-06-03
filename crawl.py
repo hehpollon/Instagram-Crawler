@@ -15,7 +15,10 @@ def writeToFile(filePath, data):
     for i in data:
         if type(i) is list:
             i = "\n".join(i)
-        file.write(str(i)+"\n")
+        try:
+            file.write(str(i)+"\n")
+        except Exception as e:
+            print(e)
     file.close()
 
 def makeDir(dirPath):
