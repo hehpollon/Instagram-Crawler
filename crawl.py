@@ -1,4 +1,3 @@
-
 import time
 import os
 import requests
@@ -162,23 +161,3 @@ def main():
         runCrawl(limitNum=limitNum, queryList=queryList)
 
 main()
-
-
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-
-            
-            
-            
-            

@@ -64,6 +64,3 @@ class Browser:
             self.driver.quit()
         except Exception:
             pass
-
-
-
