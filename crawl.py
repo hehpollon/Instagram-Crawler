@@ -142,13 +142,15 @@ def runCrawl(limitNum = 0,queryList = []):
 def main():
     args = docopt("""
     Usage:
-        crawl.py [-q QUERY] [-n NUMBER]
+        crawl.py [-q QUERY] [-n NUMBER] [-h HELP]
     
     Options:
         -q QUERY  username, add '#' to search for hashtags, e.g. 'username' or '#hashtag'
                   For multiple query seperate with comma, e.g. 'username1, username2, #hashtag'
 
         -n NUM    number of returned posts [default: 10000]
+
+        -h HELP   show this help message and exit
     """)
 
     limitNum = int(args.get('-n', 10000))
