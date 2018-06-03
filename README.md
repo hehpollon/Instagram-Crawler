@@ -19,6 +19,26 @@ Download the first 5 photos and from hashtags #hello, #hi
 ```
 $ python3.6 crawl.py -q '#hello, #hi' -n 10
 ```
+### Example of a files data
+###### photo of post will download in ./data folder
+```
+likes: 
+5,326
+
+comments: 
+923
+
+message: 
+Art of @kendricklamar by @illestration&#10;Bold, bright and colorful. 
+
+commentMessages: 
+tttt: Amazing 😉
+this_is_t.rs: my name says it all
+
+dateTime: 
+2018-05-30T19:42:03.000Z
+```
+
 ## Usage
 ```
 Usage:
