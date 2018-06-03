@@ -151,7 +151,15 @@ def main():
 
         -h HELP   show this help message and exit
     """)
-
+    hasChromeDriver = False
+    for i in os.listdir("./driver"):
+        if "chromedriver" in i:
+            hasChromeDriver = True
+            break
+    if not hasChromeDriver:
+        print("ERROR! NO 'chromedriver' Found")
+        print("Please install chromedriver at https://sites.google.com/a/chromium.org/chromedriver/")
+        return
     limitNum = int(args.get('-n', 10000))
     query = args.get('-q', "")
     if not query:
