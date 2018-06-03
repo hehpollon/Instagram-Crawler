@@ -28,7 +28,7 @@ likes:
 comments: 
 923
 
-message: 
+caption: 
 Art of @kendricklamar by @illestration&#10;Bold, bright and colorful. 
 
 commentMessages: 
