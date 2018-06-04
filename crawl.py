@@ -150,7 +150,7 @@ def main():
         -q QUERY  username, add '#' to search for hashtags, e.g. 'username' or '#hashtag'
                   For multiple query seperate with comma, e.g. 'username1, username2, #hashtag'
 
-        -n NUM    number of returned posts [default: 10000]
+        -n NUM    number of returned posts [default: 1000]
 
         -h HELP   show this help message and exit
     """)
@@ -163,7 +163,7 @@ def main():
         print("ERROR! NO 'chromedriver' Found")
         print("Please install chromedriver at https://sites.google.com/a/chromium.org/chromedriver/")
         return
-    limitNum = int(args.get('-n', 10000))
+    limitNum = int(args.get('-n', 1000))
     query = args.get('-q', "")
     if not query:
         print('Please input query!')

@@ -49,6 +49,8 @@ class Browser:
             # check for end
             if len(curSource) == len(nextSource):
                 dup += 1
+            else:
+                dup = 0
             # retry one more time 
             if dup > 1:
                 break
