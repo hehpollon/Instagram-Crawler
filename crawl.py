@@ -34,7 +34,7 @@ def extractLikes(data):
     try:
         result = data[1][:-2]
     except Exception as e:
-        print("No like data")
+        pass
         result = ""
     return result
 
@@ -43,7 +43,7 @@ def extractComments(data):
     try:
         result = data[3][:-1]
     except Exception as e:
-        print("No comment data")
+        pass
         result = ""
     return result
 
@@ -52,7 +52,7 @@ def extractDateTime(data):
     try:
         result = data.split('datetime="')[1].split('"')[0]
     except Exception as e:
-        print("No dateTime data")
+        pass
         result = ""
     return result
 
@@ -67,7 +67,7 @@ def extractCommentsMessage(data):
                     message = sp[i].split(">")[3].split("<")[0]
                     results.append(name+": "+message)
     except Exception as e:
-        print("No CommentsMessage data")
+        pass
         results = []
     return results
 
@@ -82,7 +82,7 @@ def extractCaption(data):
             result = data.split('{"node":{"text":"')[1].split('"}')[0]
             result = result.encode('utf-8').decode('unicode-escape')
     except Exception as e:
-        print("No message data")
+        pass
         result = ""
     return result
 
