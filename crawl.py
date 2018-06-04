@@ -18,7 +18,7 @@ def writeToFile(filePath, data):
         try:
             file.write(str(i)+"\n")
         except Exception as e:
-            print(e)
+            pass
     file.close()
 
 def makeDir(dirPath):
