@@ -29,19 +29,33 @@ def makeDir(dirPath):
             return False
     return True
 
-def extractLikes(data):
+def extractLang(data):
     result = ""
     try:
-        result = data[1][:-2]
+        result = data.split('lang="')[1].split('"')[0]
+    except Exception as e:
+        pass
+    return result
+
+def extractLikes(data, lang="en"):
+    result = ""
+    try:
+        if lang == "en":
+            result = data[0]
+        else:
+            result = data[1][:-2]
     except Exception as e:
         pass
         result = ""
     return result
 
-def extractComments(data):
+def extractComments(data, lang="en"):
     result = ""
     try:
-        result = data[3][:-1]
+        if lang == "en":
+            result = data[2]
+        else:
+            result = data[3][:-1]
     except Exception as e:
         pass
         result = ""
@@ -114,11 +128,13 @@ def runCrawl(limitNum = 0,queryList = []):
             writeToFile("data/"+query+"/"+dirName+"/raw.html", [cur])
             infoData = cur.split("<meta content=")[1].split(" ")
             # extract data
-            likes = extractLikes(infoData)
-            comments = extractComments(infoData)
+            lang = extractLang(cur)
+            likes = extractLikes(infoData, lang)
+            comments = extractComments(infoData, lang)
             caption = extractCaption(cur)
             dateTime = extractDateTime(cur)
             commentMessages = extractCommentsMessage(cur)
+            print(lang)
             # print("likes:",likes," comments:", comments," caption:", caption, 
             #     "commentMessages:", commentMessages, "dateTime:", dateTime)
             writeToFile(
