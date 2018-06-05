@@ -134,7 +134,6 @@ def runCrawl(limitNum = 0,queryList = []):
             caption = extractCaption(cur)
             dateTime = extractDateTime(cur)
             commentMessages = extractCommentsMessage(cur)
-            print(lang)
             # print("likes:",likes," comments:", comments," caption:", caption, 
             #     "commentMessages:", commentMessages, "dateTime:", dateTime)
             writeToFile(
