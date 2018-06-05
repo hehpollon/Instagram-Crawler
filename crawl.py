@@ -41,7 +41,7 @@ def extractLikes(data, lang="en"):
     result = ""
     try:
         if lang == "en":
-            result = data[0]
+            result = data[0][1:]
         else:
             result = data[1][:-2]
     except Exception as e:
