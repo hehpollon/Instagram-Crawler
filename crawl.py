@@ -108,9 +108,9 @@ def runCrawl(limitNum = 0,queryList = []):
         makeDir("data/"+query)
         mUrl = ""
         if query[0] == "#":
-            mUrl = "https://www.instagram.com/explore/tags/"+query[1:]
+            mUrl = "https://www.instagram.com/explore/tags/"+query[1:]+"/?hl=en"
         else:
-            mUrl = "https://www.instagram.com/"+query
+            mUrl = "https://www.instagram.com/"+query+"/?hl=en"
         browser.goToPage(mUrl)
         print("collecting url of " + query + "...")
         browser.scrollPageToBottomUntilEnd(browser.collectDpageUrl, limitNum)

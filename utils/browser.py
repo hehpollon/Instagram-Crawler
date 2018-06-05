@@ -58,7 +58,7 @@ class Browser:
     def collectDpageUrl(self, data):
         r = data.split('href="/p/')[1:]
         for i in r:
-            dPageLink = "https://www.instagram.com/p/"+i.split('"')[0]
+            dPageLink = "https://www.instagram.com/p/"+i.split('"')[0]+"&hl=en"
             self.urlList.append(dPageLink)
             
     def __del__(self):
