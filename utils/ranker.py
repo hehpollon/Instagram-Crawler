@@ -65,7 +65,7 @@ def main():
             finally:
                 f.close()
 
-    print(str(count)+"/"+str(totalCount)+" matched!")
+        print(str(count)+"/"+str(totalCount)+" matched!")
 main()
 
 
