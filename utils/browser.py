@@ -51,15 +51,16 @@ class Browser:
                 dup += 1
             else:
                 dup = 0
-            # retry one more time 
-            if dup > 1:
+            # retry three more time 
+            if dup > 2:
                 break
         
     def collectDpageUrl(self, data):
         r = data.split('href="/p/')[1:]
         for i in r:
             dPageLink = "https://www.instagram.com/p/"+i.split('"')[0]+"&hl=en"
-            self.urlList.append(dPageLink)
+            if dPageLink not in self.urlList:
+                self.urlList.append(dPageLink)
             
     def __del__(self):
         try:
