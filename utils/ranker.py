@@ -29,9 +29,9 @@ def main():
     if not query or limitNum == 0:
         print('Please input query!')
     else:
-
-        # remove exist folder
-        shutil.rmtree("../s_data/"+query)
+        if os.path.exists("../s_data/"+query):
+            # remove exist folder
+            shutil.rmtree("../s_data/"+query)
 
         # make new folder
         makeDir("../s_data/"+query)
