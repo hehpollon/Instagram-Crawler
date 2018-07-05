@@ -53,3 +53,10 @@ Options:
     
     -h HELP   show this help message and exit
 ```
+
+## Contributing
+
+This is an open source project so feel free to contribute by
+
+- Opening an [issue](https://github.com/hehpollon/Instagram-Crawler/issues/new)
+- Sending me feedback via [email](mailto://hehpollon@gmail.com)
