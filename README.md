@@ -15,9 +15,9 @@ Download the first 10 photos and information from username "instagram"
 ```
 $ python3.6 crawl.py -q 'instagram' -n 10
 ```
-Download the first 7 photos and information from hashtags #hello, #hi
+Download the first 7 photos and information(all comments) from hashtags #hello, #hi
 ```
-$ python3.6 crawl.py -q '#hello, #hi' -n 7
+$ python3.6 crawl.py -q '#hello, #hi' --a -n 7
 ```
 ###### you can enter multiple username or hashtags by separating them with commas
 ### Example of a files data
@@ -43,13 +43,15 @@ dateTime:
 ## Usage
 ```
 Usage:
-    crawl.py [-q QUERY] [-n NUMBER] [-h HELP]
+    crawl.py [-q QUERY] [-n NUMBER] [--a] [-h HELP]
     
 Options:
     -q QUERY  username, add '#' to search for hashtags, e.g. 'username' or '#hashtag'
                   For multiple query seperate with comma, e.g. 'username1, username2, #hashtag'
 
     -n NUM    number of returned posts [default: 10000]
+
+    --a       collect all comments
     
     -h HELP   show this help message and exit
 ```

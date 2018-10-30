@@ -78,7 +78,7 @@ def extractCommentsMessage(data):
             for i in range(len(sp)):
                 if i > 1:
                     name = sp[i].split(">")[1].split("<")[0]
-                    message = sp[i].split(">")[3].split("<")[0]
+                    message = sp[i].split(">")[4].split("<")[0]
                     results.append(name+": "+message)
     except Exception as e:
         pass
@@ -100,7 +100,7 @@ def extractCaption(data):
         result = ""
     return result
 
-def runCrawl(limitNum = 0,queryList = []):
+def runCrawl(limitNum = 0, queryList = [], is_all_comments=False):
     browser = Browser("driver/chromedriver")
     for query in queryList:
         browser.clearLink()
@@ -124,6 +124,8 @@ def runCrawl(limitNum = 0,queryList = []):
             if not makeDir("data/"+query+"/"+dirName):
                 continue
             browser.goToPage(url)
+            if is_all_comments:
+                browser.expandComments()
             cur = browser.getPageSource()
             writeToFile("data/"+query+"/"+dirName+"/raw.html", [cur])
             infoData = cur.split("<meta content=")[1].split(" ")
@@ -159,13 +161,15 @@ def runCrawl(limitNum = 0,queryList = []):
 def main():
     args = docopt("""
     Usage:
-        crawl.py [-q QUERY] [-n NUMBER] [-h HELP]
+        crawl.py [-q QUERY] [-n NUMBER] [--a] [-h HELP]
     
     Options:
         -q QUERY  username, add '#' to search for hashtags, e.g. 'username' or '#hashtag'
                   For multiple query seperate with comma, e.g. 'username1, username2, #hashtag'
 
         -n NUM    number of returned posts [default: 1000]
+
+        --a       collect all comments
 
         -h HELP   show this help message and exit
     """)
@@ -180,10 +184,11 @@ def main():
         return
     limitNum = int(args.get('-n', 1000))
     query = args.get('-q', "")
+    is_all_comments = args.get('--a', False)
     if not query:
         print('Please input query!')
     else:
         queryList = query.replace(" ","").split(",")
-        runCrawl(limitNum=limitNum, queryList=queryList)
+        runCrawl(limitNum=limitNum, queryList=queryList, is_all_comments=is_all_comments)
 
 main()

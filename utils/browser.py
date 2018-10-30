@@ -19,6 +19,17 @@ class Browser:
     
     def getPageSource(self):
         return self.driver.page_source
+
+    def expandComments(self):
+        try:
+            # loading all comments.
+            # if all comments is loaded, exception will raise on click function
+            while(True):
+                expandScript = "return (a = document.getElementsByClassName('Z4IfV oF4XW sqdOP yWX7d')[0].click())"
+                self.driver.execute_script(expandScript)
+                time.sleep(0.1)
+        except:
+            pass
     
     def getPageSourceCond(self, element):
         delay = 30
