@@ -25,7 +25,7 @@ class Browser:
             # loading all comments.
             # if all comments is loaded, exception will raise on click function
             while(True):
-                expandScript = "return (a = document.getElementsByClassName('Z4IfV oF4XW sqdOP yWX7d')[0].click())"
+                expandScript = "return (a = document.getElementsByClassName('Z4IfV')[0].click())"
                 self.driver.execute_script(expandScript)
                 time.sleep(0.1)
         except:
@@ -69,7 +69,7 @@ class Browser:
     def collectDpageUrl(self, data):
         r = data.split('href="/p/')[1:]
         for i in r:
-            dPageLink = "https://www.instagram.com/p/"+i.split('"')[0]+"&hl=en"
+            dPageLink = "https://www.instagram.com/p/"+i.split('"')[0]+"?hl=en"
             if dPageLink not in self.urlList:
                 self.urlList.append(dPageLink)
             
