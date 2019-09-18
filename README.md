@@ -1,4 +1,4 @@
-<img src="https://index.tnwcdn.com/company/instagram/avatar" width="200" align="right">
+<img src="https://instagram-brand.com/wp-content/uploads/2016/11/Instagram_AppIcon_Aug2017.png?w=200" width="200" align="right">
 
 # Instagram-Crawler
 Non API. Crawling post (photo, likes, comments, date ...) by username, hashtags
