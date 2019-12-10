@@ -72,59 +72,7 @@ class Browser:
             dPageLink = "https://www.instagram.com/p/"+i.split('"')[0]+"?hl=en"
             if dPageLink not in self.urlList:
                 self.urlList.append(dPageLink)
-
-    def log_in(self, user_info):
-        username = user_info['username']
-        password = user_info['password']
-        wait = WebDriverWait(self.driver, 3)
-
-        element = wait.until(EC.presence_of_element_located((By.NAME, 'username')))
-        element.send_keys(username)
-        self.driver.find_element_by_name('password').send_keys(password)
-
-        element = wait.until(EC.element_to_be_clickable((By.XPATH,
-            '//*[@id="react-root"]/section/main/div/article/div/div[1]/div/form/div[4]/button')))
-        element.click()
-
-        try:
-            wait.until(EC.presence_of_element_located((By.ID, 'slfErrorAlert')))  # check id password
-            return False
-        except:
-            try:
-                Err_msg = wait.until(EC.presence_of_element_located((By.TAG_NAME, 'h2')))  # Login Verification
-                if 'Unusual' in Err_msg.text:
-                    # send security code
-                    element = wait.until(EC.element_to_be_clickable((By.XPATH,
-                        '//*[@id="react-root"]/section/div/div/div[3]/form/span/button')))
-                    element.click()
-                    isOK = True
-
-                    sec_code_area = self.driver.find_element_by_id('security_code')
-                    submit = self.driver.find_element_by_xpath(
-                        '//*[@id="react-root"]/section/div/div/div[2]/form/span/button')
-
-                    while isOK:
-                        isOK = False
-                        # get input
-                        print("Input 'exit' if u don't want to log in")
-                        key = input('Input the code that sent to your e-mail: ')
-                        if key == 'exit':
-                            return False
-
-                        sec_code_area.clear()
-                        sec_code_area.send_keys(key)
-                        submit.click()
-
-                        # input valid?
-                        wait.until(EC.invisibility_of_element((By.CSS_SELECTOR, ".W1Bne")))
-                        self.driver.find_element_by_id('form_error')
-                        isOK = True
-                        print('Error Check Code')
-                else:
-                    return True
-            except:
-                return True
-
+            
     def __del__(self):
         try:
             self.driver.quit()

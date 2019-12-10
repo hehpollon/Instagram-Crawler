@@ -1,21 +1,14 @@
-import json
-import os
 import time
-
+import os
 import requests
+from utils.browser import Browser
 from docopt import docopt
 from tqdm import tqdm
-from bs4 import BeautifulSoup
-import lxml
-
-from utils.browser import Browser
-
 
 def downloadImage(imageUrl, imagePath):
     img_data = requests.get(imageUrl).content
     with open(imagePath, 'wb') as handler:
         handler.write(img_data)
-
 
 def writeToFile(filePath, data):
     file = open(filePath, 'w', encoding='utf8')
@@ -23,11 +16,10 @@ def writeToFile(filePath, data):
         if type(i) is list:
             i = "\n".join(i)
         try:
-            file.write(str(i) + "\n")
+            file.write(str(i)+"\n")
         except Exception as e:
             pass
     file.close()
-
 
 def makeDir(dirPath):
     if not os.path.exists(dirPath):
@@ -37,79 +29,88 @@ def makeDir(dirPath):
             return False
     return True
 
-
-def extractLikes(data):
+def extractLang(data):
     result = ""
     try:
-        result = data.find("div", class_="Nm9Fw").text[0:-6]
+        result = data.split('lang="')[1].split('"')[0]
+    except Exception as e:
+        pass
+    return result
+
+def extractLikes(data, lang="en"):
+    result = ""
+    try:
+        if lang == "en":
+            result = data[0][1:]
+        else:
+            result = data[1][:-2]
     except Exception as e:
         pass
         result = ""
     return result
 
-
-def extractComments(data):
-    result = []
+def extractComments(data, lang="en"):
+    result = ""
     try:
-        result = data.find_all("div", class_="C4VMK")
+        if lang == "en":
+            result = data[2]
+        else:
+            result = data[3][:-1]
     except Exception as e:
         pass
-        result = []
+        result = ""
     return result
-
 
 def extractDateTime(data):
     result = ""
     try:
-        result = data.find("time").get("datetime")
+        result = data.split('datetime="')[1].split('"')[0]
     except Exception as e:
         pass
         result = ""
     return result
 
-
 def extractCommentsMessage(data):
     results = []
     try:
-        for one in data:
-            results.append(one.contents[0].text + ": " + one.contents[1].text)
+        sp = data.split("FPmhX notranslate TlrDj")
+        if len(sp) > 2:
+            for i in range(len(sp)):
+                if i > 1:
+                    name = sp[i].split(">")[1].split("<")[0]
+                    message = sp[i].split(">")[4].split("<")[0]
+                    results.append(name+": "+message)
     except Exception as e:
         pass
         results = []
     return results
 
-
 def extractCaption(data):
     result = ""
     try:
-        result = data.get("alt")
+        splitData = data.split('<img alt="')
+        if len(splitData) > 1:
+            result = splitData[1].split('"')[0]
+        else:
+            # only english?
+            result = data.split('{"node":{"text":"')[1].split('"}')[0]
+            result = result.encode('utf-8').decode('unicode-escape')
     except Exception as e:
         pass
         result = ""
     return result
 
-
-def runCrawl(limitNum=0, queryList=[], is_all_comments=False, userinfo={}):
+def runCrawl(limitNum = 0, queryList = [], is_all_comments=False):
     browser = Browser("driver/chromedriver")
-    if userinfo != {}:
-        print('Start logging in')
-        browser.goToPage('https://www.instagram.com/accounts/login/?hl=en')
-        if browser.log_in(userinfo):
-            print('Success to log in')
-        else:
-            print('Fail to log in')
-            return
-    else:
-        print('Continue Without logging in')
     for query in queryList:
         browser.clearLink()
         makeDir("data")
-        makeDir("data/" + query)
+        makeDir("data/"+query)
         mUrl = ""
         if query[0] == "#":
-            mUrl = "https://www.instagram.com/explore/tags/" + query[1:] + "/?hl=en"
+            mUrl = "https://www.instagram.com/explore/tags/"+query[1:]+"/?hl=en"
         else:
-            mUrl = "https://www.instagram.com/" + query + "/?hl=en"
+            mUrl = "https://www.instagram.com/"+query+"/?hl=en"
         browser.goToPage(mUrl)
         print("collecting url of " + query + "...")
         browser.scrollPageToBottomUntilEnd(browser.collectDpageUrl, limitNum)
@@ -120,27 +121,26 @@ def runCrawl(limitNum=0, queryList=[], is_all_comments=False, userinfo={}):
         for url in tqdm(slist):
             dirName = url.split("/")[4]
             # skip if already crawled 
-            if not makeDir("data/" + query + "/" + dirName):
+            if not makeDir("data/"+query+"/"+dirName):
                 continue
             browser.goToPage(url)
             if is_all_comments:
                 browser.expandComments()
             cur = browser.getPageSource()
-            writeToFile("data/" + query + "/" + dirName + "/raw.html", [cur])
-            infoData = BeautifulSoup(cur, "lxml")
-            imageData = infoData.find("img", class_="FFVAD")
+            writeToFile("data/"+query+"/"+dirName+"/raw.html", [cur])
+            infoData = cur.split("<meta content=")[1].split(" ")
             # extract data
-            likes = extractLikes(infoData)
-            comments_list = extractComments(infoData)
-            comments = comments_list.__len__()
-            caption = extractCaption(imageData)
-            dateTime = extractDateTime(infoData)
-            commentMessages = extractCommentsMessage(comments_list)
+            lang = extractLang(cur)
+            likes = extractLikes(infoData, lang)
+            comments = extractComments(infoData, lang)
+            caption = extractCaption(cur)
+            dateTime = extractDateTime(cur)
+            commentMessages = extractCommentsMessage(cur)
             # print("likes:",likes," comments:", comments," caption:", caption, 
             #     "commentMessages:", commentMessages, "dateTime:", dateTime)
             writeToFile(
-                "data/" + query + "/" + dirName + "/info.txt",
-                [
+                "data/"+query+"/"+dirName+"/info.txt", 
+                [   
                     "likes: ", likes, "",
                     "comments: ", comments, "",
                     "caption: ", caption, "",
@@ -149,8 +149,8 @@ def runCrawl(limitNum=0, queryList=[], is_all_comments=False, userinfo={}):
                 ]
             )
             # download image
-            imageUrl = imageData.get("srcset")
-            downloadImage(imageUrl, "data/" + query + "/" + dirName + "/image.jpg")
+            imageUrl = cur.split('meta property="og:image" content="')[1].split('"')[0]
+            downloadImage(imageUrl,"data/"+query+"/"+dirName+"/image.jpg")
             time.sleep(1)
         print("query " + query + " collecting finish")
 
@@ -158,24 +158,21 @@ def runCrawl(limitNum=0, queryList=[], is_all_comments=False, userinfo={}):
     browser.driver.quit()
     print("FINISH!")
 
-
 def main():
     args = docopt("""
-        Usage:
-            crawl.py [-q QUERY] [-n NUMBER] [--a] [--l] [-h HELP]
+    Usage:
+        crawl.py [-q QUERY] [-n NUMBER] [--a] [-h HELP]
+    
+    Options:
+        -q QUERY  username, add '#' to search for hashtags, e.g. 'username' or '#hashtag'
+                  For multiple query seperate with comma, e.g. 'username1, username2, #hashtag'
 
-        Options:
-            -q QUERY  username, add '#' to search for hashtags, e.g. 'username' or '#hashtag'
-                      For multiple query seperate with comma, e.g. 'username1, username2, #hashtag'
+        -n NUM    number of returned posts [default: 1000]
 
-            -n NUM    number of returned posts [default: 1000]
+        --a       collect all comments
 
-            --a       collect all comments
-            
-            --l       get log in to instagram
-            
-            -h HELP   show this help message and exit
-        """)
+        -h HELP   show this help message and exit
+    """)
     hasChromeDriver = False
     for i in os.listdir("./driver"):
         if "chromedriver" in i:
@@ -185,20 +182,13 @@ def main():
         print("ERROR! NO 'chromedriver' Found")
         print("Please install chromedriver at https://sites.google.com/a/chromium.org/chromedriver/")
         return
-    is_login = args.get('--l', False)
     limitNum = int(args.get('-n', 1000))
     query = args.get('-q', "")
     is_all_comments = args.get('--a', False)
-
-    userinfo = {}
-    if is_login:
-        with open('./userinfo.json') as json_file:
-            userinfo = json.load(json_file)
-
     if not query:
         print('Please input query!')
     else:
-        queryList = query.replace(" ", "").split(",")
-        runCrawl(limitNum=limitNum, queryList=queryList, is_all_comments=is_all_comments, userinfo=userinfo)
+        queryList = query.replace(" ","").split(",")
+        runCrawl(limitNum=limitNum, queryList=queryList, is_all_comments=is_all_comments)
 
 main()
