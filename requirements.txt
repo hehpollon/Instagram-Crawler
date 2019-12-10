@@ -1,4 +1,6 @@
-requests==2.20.0
-selenium==3.4.0
+beautifulsoup4==4.8.1
+lxml==4.4.1
+requests==2.22.0
+selenium==3.14.1
 docopt==0.6.2
-tqdm==4.23.4
+tqdm==4.38.0
