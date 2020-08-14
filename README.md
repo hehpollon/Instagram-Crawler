@@ -13,11 +13,11 @@ Non API. Crawling post (photo, likes, comments, date ...) by username, hashtags
 
 Download the first 10 photos and information from username "instagram"
 ```
-$ python3.6 crawl.py -q 'instagram' -n 10
+$ python3 crawl.py -q 'instagram' -n 10
 ```
 Download the first 7 photos and information(all comments) from hashtags #hello, #hi
 ```
-$ python3.6 crawl.py -q '#hello, #hi' --a -n 7
+$ python3 crawl.py -q '#hello, #hi' --a -n 7
 ```
 ###### you can enter multiple username or hashtags by separating them with commas
 ### Example of a files data

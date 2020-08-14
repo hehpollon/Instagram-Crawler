@@ -4,6 +4,7 @@ import requests
 from utils.browser import Browser
 from docopt import docopt
 from tqdm import tqdm
+import html
 
 def downloadImage(imageUrl, imagePath):
     img_data = requests.get(imageUrl).content
@@ -149,7 +150,7 @@ def runCrawl(limitNum = 0, queryList = [], is_all_comments=False):
                 ]
             )
             # download image
-            imageUrl = cur.split('meta property="og:image" content="')[1].split('"')[0]
+            imageUrl = html.unescape(cur.split('meta property="og:image" content="')[1].split('"')[0])
             downloadImage(imageUrl,"data/"+query+"/"+dirName+"/image.jpg")
             time.sleep(1)
         print("query " + query + " collecting finish")
