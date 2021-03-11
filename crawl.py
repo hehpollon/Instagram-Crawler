@@ -74,12 +74,12 @@ def extractDateTime(data):
 def extractCommentsMessage(data):
     results = []
     try:
-        sp = data.split("FPmhX notranslate TlrDj")
+        sp = data.split("sqdOP yWX7d     _8A5w5   ZIAjV")
         if len(sp) > 2:
             for i in range(len(sp)):
                 if i > 1:
                     name = sp[i].split(">")[1].split("<")[0]
-                    message = sp[i].split(">")[4].split("<")[0]
+                    message = sp[i].split(">")[5].split("<")[0]
                     results.append(name+": "+message)
     except Exception as e:
         pass
